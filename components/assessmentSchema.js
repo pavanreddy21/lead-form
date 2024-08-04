@@ -38,12 +38,5 @@ export const uischema = {
       }
     },
     { type: "Control", scope: "#/properties/helpText", options: { multi: true } },
-    {
-      type: "Control",
-      scope: "#/properties/resume",
-      options: {
-        format: "file"
-      }
-    }
   ]
 };

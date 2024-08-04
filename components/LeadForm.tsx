@@ -4,8 +4,17 @@ import { schema as originalSchema, uischema } from "./assessmentSchema";
 import { useState } from "react";
 import { materialRenderers } from "@jsonforms/material-renderers";
 import { loadLeadsData, saveLeadsData } from "./uitls";
+import CustomTextarea from "./CustomTextarea";
 
 export default function AssessmentForm({}) {
+  const customRenderers = [
+    ...materialRenderers,
+    {
+      tester: (uischema) =>
+        uischema.scope === "#/properties/helpText" ? 5 : -1,
+      renderer: CustomTextarea,
+    },
+  ];
   const [formData, setFormData] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [resume, setResume] = useState(null);
@@ -113,7 +122,7 @@ export default function AssessmentForm({}) {
             handleValidation({ errors });
           }}
           onBlur={(event) => handleBlur(event.target.name)}
-          renderers={materialRenderers}
+          renderers={customRenderers}
         />
         <div className="mt-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -130,16 +139,7 @@ export default function AssessmentForm({}) {
             <p className="text-red-500 mt-2">Please upload your resume.</p>
           )}
         </div>
-        {errors.length > 0 && (
-          <div className="text-red-500 mt-4">
-            {errors.map(
-              (error, index) =>
-                touched[error.instancePath.substring(1)] && (
-                  <p key={index}>{error.message}</p>
-                )
-            )}
-          </div>
-        )}
+
         <button
           type="submit"
           className={`mt-8 w-full px-6 py-3 text-white rounded-md ${
